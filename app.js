@@ -86,12 +86,12 @@ app.get('/admin', isAthenticated, (req, res) => {
     res.render('admin');
 });
 
-// Ruta de categorias
+// Ruta de categorias 
 app.get('/categorias', isAthenticated, (req, res) => {
     res.render('categorias');
 });
 
-// Ruta de categorias
+// Ruta de categorias POSTMAN
 app.post('/categorias', (req, res) => {
     console.log('Solicitud: ', req.body);
     const  { nombre, descripcion } = req.body;
@@ -107,13 +107,13 @@ app.post('/categorias', (req, res) => {
     });
 });
 
-// Ruta de productos
+// Ruta de productos POSTMAN
 app.get('/productos', isAthenticated, (req, res) => {
     const query = 'SELECT * FROM categorias';
     db.query(query, (err, result) => {
         if(err){
-           console.err('Error al obtener las categorias', err);
-           return res.status(500).send('Error al obtener las categorias'); 
+           console.err('Error al obtener las categorias de productos', err);
+           return res.status(500).send('Error al obtener las categorias de productos'); 
         }
         res.render('productos', { categorias: result });
     });
