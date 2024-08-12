@@ -32,7 +32,11 @@ CREATE TABLE `carrito` (
   `usuario_id` int NOT NULL,
   `producto_id` int NOT NULL,
   `cantidad` int NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT pk_carrito PRIMARY KEY(id),
+  CONSTRAINT fk_usuario_id FOREIGN KEY(usuario_id) REFERENCES usuarios(id),
+   CONSTRAINT fk_prodcuto_id FOREIGN KEY(prodcuto_id) REFERENCES productos(id)
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -122,7 +126,9 @@ CREATE TABLE `ordenes` (
   `usuario_id` int NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `estado` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Pendiente',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT pk_ordenes PRIMARY KEY (id),
+  CONSTRAINT fk_usuario_ord FOREIGN KEY(usuario_id) REFERENCES usuarios(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -136,7 +142,10 @@ CREATE TABLE `orden_items` (
   `orden_id` int NOT NULL,
   `producto_id` int NOT NULL,
   `cantidad` int NOT NULL,
-  `precio` decimal(10,2) NOT NULL
+  `precio` decimal(10,2) NOT NULL,
+  CONSTRAINT pk_orden_items PRIMARY KEY (id),
+  CONSTRAINT fk_orden_id FOREIGN KEY(orden_id) REFERENCES ordenes(id),
+  CONSTRAINT fk_orden_pro FOREIGN KEY(producto_id) REFERENCES productos(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
