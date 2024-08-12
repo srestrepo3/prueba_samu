@@ -1,12 +1,13 @@
 const express = require ('express');
 const path = require ('path');
 const session = require('express-session');
-const morgan = require('morgan');
+const morgan = require('morgan'); 
 
 const app= express();
 const PORT = process.env.PORT || 3000;
 
-
+// Midelware
+app.use(morgan('dev'));
 
 
 // Configurar la sesion
