@@ -52,4 +52,4 @@ const dbconfig ={
 }
 
 
-module.exports = {app, PORT, dbconfig,session };
+module.exports = {app, PORT, dbconfig,session,upload  };

@@ -1,4 +1,4 @@
-const { app } = require('./config');
+const { app ,upload } = require('./config');
 const db = require('./db');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
@@ -122,8 +122,11 @@ app.get('/productos', isAthenticated, (req, res) => {
 
 // Ruta para cargar los productos
 app.post('/productos', isAthenticated, upload.single('imagen'), (req, res) => {
+    // recibir lo que viene por url 
     const { nombre, descripcion, precio, stock, categoria } = req.body;
+     // recibir el nombre de la imagen en la bd 
     const imagenNombre = req.file.filename;
+    // validar en donde queda almanenada la imagen 
     const imagenURL = `${req.protocol}://${req.get('host')}/uploads/${imagenNombre}`;
 
 
@@ -136,7 +139,7 @@ app.post('/productos', isAthenticated, upload.single('imagen'), (req, res) => {
             return res.status(500).send('Error al guardar el producto');
         }
         res.redirect('/listar-productos');
-        // res.send('Prodcuto guardado exitosamente');
+        // res.send('Producto guardado exitosamente');
     });
 });
 
