@@ -1,4 +1,4 @@
-const { app ,upload } = require('./config');
+const { app, upload } = require('./config');
 const db = require('./db');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
@@ -8,10 +8,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Milddleware para proteger rutas
-function isAthenticated(req, res, next){
-    if(req.session.usuario){
+function isAthenticated(req, res, next) {
+    if (req.session.usuario) {
         return next();
-    }else{
+    } else {
         res.redirect('/login');
     }
 }
@@ -19,7 +19,7 @@ function isAthenticated(req, res, next){
 // Ruta para destruir sesion
 app.get('/logout', (req, res) => {
     req.session.destroy((e) => {
-        if(e){
+        if (e) {
             console.log(e);
             return res.status(500).send('Error al cerrar sesion');
         }
@@ -28,13 +28,13 @@ app.get('/logout', (req, res) => {
 });
 
 // Rutas de las url
-app.get('/', (req, res) =>{
+app.get('/', (req, res) => {
     const cartCount = req.session.cart ? req.session.cart.length : 0;
     const query = 'SELECT * FROM productos';
     db.query(query, (err, result) => {
-        if(err){
-           console.err('Error al obtener las productos', err);
-           return res.status(500).send('Error al obtener los productos'); 
+        if (err) {
+            console.err('Error al obtener las productos', err);
+            return res.status(500).send('Error al obtener los productos');
         }
         res.render('index', { productos: result, cartCount });
     });
@@ -53,12 +53,12 @@ app.get('/registro', (req, res) => {
 app.post('/registro', async (req, res) => {
     const { nombre, apellido, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    
+
     db.query('INSERT INTO usuarios (nombre, apellidos, email, password) VALUES (?, ?, ?, ?)', [nombre, apellido, email, hashedPassword], (err, result) => {
-        if(err){
+        if (err) {
             console.log(err);
             res.send('Error al registrar usuario');
-        }else {
+        } else {
             console.log(result);
             res.redirect('login');
         }
@@ -70,19 +70,19 @@ app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
     db.query('SELECT * FROM usuarios WHERE email = ?', [email], async (err, result) => {
-        if(err){
+        if (err) {
             console.log(err);
             res.send('Error al iniciar sesion');
-        }else {
-            if(result.length > 0){
+        } else {
+            if (result.length > 0) {
                 const usuario = result[0];
-                if(await bcrypt.compare(password, usuario.password)){
+                if (await bcrypt.compare(password, usuario.password)) {
                     req.session.usuario = usuario;
                     res.redirect('/admin');
-                }else {
+                } else {
                     res.send('Credenciales incorrectas');
                 }
-            }else {
+            } else {
                 res.send('Usuario no encontrado o no esta activo');
             }
         }
@@ -102,16 +102,16 @@ app.get('/categorias', isAthenticated, (req, res) => {
 // Ruta de creacion decategorias POSTMAN
 app.post('/categorias', (req, res) => {
     console.log('Solicitud: ', req.body);
-    const  { nombre, descripcion } = req.body;
+    const { nombre, descripcion } = req.body;
 
     db.query('INSERT INTO categorias (nombre, descripcion) VALUES (?, ?)', [nombre, descripcion], (err, result) => {
-        if(err){
+        if (err) {
             console.log(err);
             res.send('Error al insertar categoria');
-        }else {
+        } else {
             console.log(result);
             res.send('categoria insertada con exito!');
-        }    
+        }
     });
 });
 
@@ -119,9 +119,9 @@ app.post('/categorias', (req, res) => {
 app.get('/productos', isAthenticated, (req, res) => {
     const query = 'SELECT * FROM categorias';
     db.query(query, (err, result) => {
-        if(err){
-           console.err('Error al obtener las categorias de productos', err);
-           return res.status(500).send('Error al obtener las categorias de productos'); 
+        if (err) {
+            console.err('Error al obtener las categorias de productos', err);
+            return res.status(500).send('Error al obtener las categorias de productos');
         }
         res.render('productos', { categorias: result });
     });
@@ -131,7 +131,7 @@ app.get('/productos', isAthenticated, (req, res) => {
 app.post('/productos', isAthenticated, upload.single('imagen'), (req, res) => {
     // recibir lo que viene por url 
     const { nombre, descripcion, precio, stock, categoria } = req.body;
-     // recibir el nombre de la imagen en la bd 
+    // recibir el nombre de la imagen en la bd 
     const imagenNombre = req.file.filename;
     // validar en donde queda almanenada la imagen 
     const imagenURL = `${req.protocol}://${req.get('host')}/uploads/${imagenNombre}`;
@@ -141,7 +141,7 @@ app.post('/productos', isAthenticated, upload.single('imagen'), (req, res) => {
     const values = [nombre, descripcion, precio, stock, categoria, imagenURL];
 
     db.query(query, values, (err, result) => {
-        if(err){
+        if (err) {
             console.log('Error al guardar el producto:', err);
             return res.status(500).send('Error al guardar el producto');
         }
@@ -169,7 +169,7 @@ app.post('/add-to-cart', (req, res) => {
     if (!req.session.cart) {
         req.session.cart = [];
     }
-    
+
     const existingProductIndex = req.session.cart.findIndex(item => item.id == productoId);
 
     if (existingProductIndex > -1) {
@@ -180,17 +180,17 @@ app.post('/add-to-cart', (req, res) => {
         db.query('SELECT * FROM productos WHERE id = ?', [productoId], (err, result) => {
             if (err) {
                 console.log('Error al obtener el producto:', err);
-                return res.status(500).json({error: 'Error al agregar al carrito'});
+                return res.status(500).json({ error: 'Error al agregar al carrito' });
             }
 
             if (result.length > 0) {
                 const producto = result[0];
-                producto.cantidad = 1; 
+                producto.cantidad = 1;
                 req.session.cart.push(producto);
                 const cartCount = req.session.cart.reduce((sum, item) => sum + item.cantidad, 0);
                 res.json({ message: 'Producto agregado al carrito', cartCount: cartCount });
             } else {
-                res.status(404).json({error: 'Producto no encontrado'});
+                res.status(404).json({ error: 'Producto no encontrado' });
             }
         });
     }
@@ -210,7 +210,7 @@ app.post('/procesar-compra', isAthenticated, (req, res) => {
     const cart = req.session.cart; //Esta es una propiedad que se utiliza para almacenar datos.
     const userId = req.session.usuario.id;
 
-    if(!cart || cart.length === 0){
+    if (!cart || cart.length === 0) {
         return res.status(400).send('El carrito esta vacio.');
     }
 
@@ -218,7 +218,7 @@ app.post('/procesar-compra', isAthenticated, (req, res) => {
 
     const orderQuery = 'INSERT INTO ordenes (usuario_id, total) VALUES (?, ?)';
     db.query(orderQuery, [userId, total], (err, result) => {
-        if(err){
+        if (err) {
             console.log('Error al crear la orden:', err);
             return res.status(500).send('Error al procesar la compra.');
         }
@@ -229,7 +229,7 @@ app.post('/procesar-compra', isAthenticated, (req, res) => {
         const orderItems = cart.map(item => [orderId, item.id, item.cantidad, item.precio]);
 
         db.query(orderItemsQuery, [orderItems], (err, result) => {
-            if(err){
+            if (err) {
                 console.log('Error al guardar los productos de la orden:', err);
                 return res.status(500).send('Error al procesar la compra');
             }
