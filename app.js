@@ -91,11 +91,20 @@ app.post('/login', (req, res) => {
 
 // Ruta de logueo
 app.get('/admin', isAthenticated, (req, res) => {
-    res.render('admin');
+    const cartCount = req.session.cart ? req.session.cart.length : 0;
+    const query = 'SELECT * FROM productos';
+    db.query(query, (err, result) => {
+        if(err){
+           console.err('Error al obtener los productos', err);
+           return res.status(500).send('Error al obtener los productos'); 
+        }
+        res.render('admin', { productos: result, cartCount });
+    });
 });
 
 // Ruta de categorias 
 app.get('/categorias', isAthenticated, (req, res) => {
+    const cartCount = req.session.cart ? req.session.cart.length : 0;
     res.render('categorias');
 });
 
@@ -117,6 +126,7 @@ app.post('/categorias', (req, res) => {
 
 // Ruta de productos con categorias  POSTMAN
 app.get('/productos', isAthenticated, (req, res) => {
+    const cartCount = req.session.cart ? req.session.cart.length : 0;
     const query = 'SELECT * FROM categorias';
     db.query(query, (err, result) => {
         if (err) {
@@ -152,6 +162,7 @@ app.post('/productos', isAthenticated, upload.single('imagen'), (req, res) => {
 
 // Ruta listar productos
 app.get('/listar-productos', isAthenticated, (req, res) => {
+    const cartCount = req.session.cart ? req.session.cart.length : 0;
     const query = 'SELECT productos.nombre AS nom_producto, categorias.nombre AS nom_categoria, productos.descripcion, productos.precio, productos.stock, productos.imagen_url  FROM productos JOIN categorias ON productos.categoria_id = categorias.id';
     db.query(query, (err, result) => {
         if(err){
