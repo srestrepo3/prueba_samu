@@ -120,7 +120,9 @@ figure.offers__images img {
     font-weight: bold;
 }
 .gamer {
-    background: url('../images/fondo-juegos.png');
+    padding: 2em 0;
+    background: #17202a;
+	 background: url('../images/fondo-juegos.png'); 
     background-repeat: no-repeat;
     background-size: cover;
     background-position:bottom center;
@@ -128,41 +130,45 @@ figure.offers__images img {
     overflow: hidden;
 }
 .gamer__title {
+    margin: 0;
     color: #fff;
     text-align: center;
-    font-size: 35px;
-}
-.gamer__figure {
-    width: 60%;
-    margin: 0 auto 1em;
-}
-.gamer__card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1em;
-}
-.gamer__img {
-    display: block;
-    text-align: center;
-    width: 100%;
-    transition: all .3s;
-    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
-    border-radius: 15px;
-}
-.gamer__img:hover {
-   transform: scale(1.1);
+    font-size: 24px;
+    text-transform: uppercase;
+    padding: 0 0 1em;
 }
 .gamer__subtitle {
+    margin: 0;
     color: #fff;
     text-align: center;
-    font-size: 25px;
-    margin: 0;
+    font-size: 20px;
+    text-transform: uppercase;
+}
+.gamer__items {
+    width: 50%;
+    background: #1b2631;
+    box-shadow: 3px -1px 0px rgb(0 0 0 / 0%);
+    padding: 0.5em;
+}
+.gamer__cards {
+    width: 80%;
+    display: flex;
+    gap: 2em;
+    margin: 0 auto;
+}
+figure.gamer__images {
+    width: 76%;
+    margin: 1em auto 0;
+}
+figure.gamer__images img {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
 }
 .gamer__price {
-    color: #fff;
+    color: #ff7214;
     text-align: center;
-    margin: 0;
+    font-weight: bold;
 }
 .gamer__cta {
     display: block;
@@ -171,7 +177,7 @@ figure.offers__images img {
     font-size: 16px;
     text-decoration: none;
     width: max-content;
-    margin: 2em auto 0;
+    margin: 0 auto;
     padding: .5em 1em;
     border-radius: 50px;
     font-weight: bold;

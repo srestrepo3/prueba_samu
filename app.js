@@ -28,15 +28,23 @@ app.get('/logout', (req, res) => {
 });
 
 // Rutas de las url
-app.get('/', (req, res) => {
+app.get('/', (req, res) =>{
     const cartCount = req.session.cart ? req.session.cart.length : 0;
-    const query = 'SELECT * FROM productos';
-    db.query(query, (err, result) => {
-        if (err) {
-            console.err('Error al obtener las productos', err);
-            return res.status(500).send('Error al obtener los productos');
+    const productoQuery = 'SELECT * FROM productos';
+    const juegosQuery = 'SELECT * FROM productos WHERE categoria_id = 1';
+    db.query(productoQuery, (err, productos) => {
+        if(err){
+           console.err('Error al obtener los Accesorios', err);
+           return res.status(500).send('Error al obtener los Accesorios'); 
         }
-        res.render('index', { productos: result, cartCount });
+
+        db.query(juegosQuery, (err, juegos) => {
+            if(err){
+                console.err('Error al obtener los productos de la categoria juegos', err);
+                return res.status(500).send('Error al obtener los productos de la categoria juegos'); 
+             }
+            res.render('index', { productos, cartCount, juegos });
+        });
     });
 });
 // Ruta de logueo
@@ -105,7 +113,7 @@ app.get('/admin', isAthenticated, (req, res) => {
 // Ruta de categorias 
 app.get('/categorias', isAthenticated, (req, res) => {
     const cartCount = req.session.cart ? req.session.cart.length : 0;
-    res.render('categorias');
+    res.render('categorias', { cartCount });
 });
 
 // Ruta de creacion decategorias POSTMAN
@@ -133,7 +141,7 @@ app.get('/productos', isAthenticated, (req, res) => {
             console.err('Error al obtener las categorias de productos', err);
             return res.status(500).send('Error al obtener las categorias de productos');
         }
-        res.render('productos', { categorias: result });
+        res.render('productos', { categorias: result, cartCount });
     });
 });
 
@@ -169,7 +177,7 @@ app.get('/listar-productos', isAthenticated, (req, res) => {
            console.err('Error al obtener las productos', err);
            return res.status(500).send('Error al obtener los productos'); 
         }
-        res.render('listar-productos', { productos: result });
+        res.render('listar-productos', { productos: result, cartCount });
     });
 });
 
