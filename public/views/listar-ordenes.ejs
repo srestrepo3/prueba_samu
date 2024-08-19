@@ -4,7 +4,7 @@
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-        <h1>Listado General  de Productos</h1>
+        <h1>Listado total de productos</h1>
         </div>
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -22,7 +22,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Listado General de Productos</h3>
+            <h3 class="card-title">Listado total de Ordenes</h3>
           </div>
           <!-- /.card-header -->
           <div class="card-body">
@@ -30,23 +30,23 @@
               <thead>
               <tr>
                 <th>Id</th>
-                <th>Nom producto</th>
-                <th>Descripcion</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Categoria</th>
-                <th>--Imagen--</th>
+                <th>usuario</th>
+                <th>Total orden</th>
+                <th>estado</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
               </tr>
               </thead>
               <tbody>
-                <% productos.forEach(producto => {  %>
+                <% ordenes.forEach(orden => {  %>
               <tr>
-                <td><%= producto.id %></td>
-                <td><%= producto.nom_producto %></td>
-                <td><%= producto.descripcion %></td>
-                <td><%= producto.precio.toLocaleString('es-CO') %></td>
-                <td><%= producto.stock %></td>
-                <td><%= producto.nom_categoria %></td>
+                <td><%= orden.id %></td>
+                <td><%= orden.usuario_id %></td>
+                <td><%= orden.total.toLocaleString('es-CO') %></td>
+                <td><%= orden.estado %></td>
+                <td><%= orden.created_at%></td>
+                
+              
                 <td>
                     <img style="width: 70px;"; class="product__img" src="<%= producto.imagen_url %>" alt="<%= producto.nombre %>">
                 </td>
@@ -56,12 +56,11 @@
               <tfoot>
               <tr>
                 <th>Id</th>
-                <th>Nom producto</th>
-                <th>Descripcion</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Categoria</th>
-                <th>--Imagen--</th>
+                <th>usuario</th>
+                <th>Total orden</th>
+                <th>estado</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
               </tr>
               </tfoot>
             </table>

@@ -30,7 +30,7 @@ app.get('/logout', (req, res) => {
 // Rutas de las url
 app.get('/', (req, res) =>{
     const cartCount = req.session.cart ? req.session.cart.length : 0;
-    const productoQuery = 'SELECT * FROM productos';
+    const productoQuery = 'SELECT * FROM productos WHERE categoria_id = 2';
     const juegosQuery = 'SELECT * FROM productos WHERE categoria_id = 1';
     db.query(productoQuery, (err, productos) => {
         if(err){
@@ -262,6 +262,19 @@ app.post('/procesar-compra', isAthenticated, (req, res) => {
 app.get('/confirmacion-compra', (req, res) => {
     const { ordenId } = req.query;
     res.render('confirmacion-compra', { ordenId });
+});
+
+// Ruta listar ordenes pednientes 
+app.get('/listar-ordenes', isAthenticated, (req, res) => {
+    const cartCount = req.session.cart ? req.session.cart.length : 0;
+    const query = 'SELECT * ordenes ';
+    db.query(query, (err, result) => {
+        if(err){
+           console.err('Error al obtener las ordenes', err);
+           return res.status(500).send('Error al obtener las ordenes'); 
+        }
+        res.render('listar-ordenes', { ordenes: result, cartCount });
+    });
 });
 
 module.exports = app;
