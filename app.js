@@ -1,7 +1,9 @@
-const { app, upload } = require('./config');
+const { app, upload, PAYU_API_URL , API_KEY ,MERCHAN_ID,ACCOUNT_ID ,API_LOGIN } = require('./config');
 const db = require('./db');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const axios = require('axios');
+const crypto = require('crypto-js');
 
 // Me permite recibir peticiones externas.
 app.use(bodyParser.json());
@@ -265,16 +267,69 @@ app.get('/confirmacion-compra', (req, res) => {
 });
 
 // Ruta listar ordenes pednientes 
-app.get('/listar-ordenes', isAthenticated, (req, res) => {
+app.get('/list-ordenes', isAthenticated, (req, res) => {
     const cartCount = req.session.cart ? req.session.cart.length : 0;
-    const query = 'SELECT * ordenes ';
+    const query = 'SELECT  usuarios.nombre AS user_nom, usuarios.apellidos AS user_ape ,ordenes.id,ordenes.total , ordenes.estado, ordenes.created_at  FROM  ordenes JOIN usuarios On ordenes.id = usuarios.id WHERE ordenes.estado = "Pendiente"  ';
     db.query(query, (err, result) => {
-        if(err){
-           console.err('Error al obtener las ordenes', err);
-           return res.status(500).send('Error al obtener las ordenes'); 
+        if (err) {
+            console.err('Error al obtener las ordenes', err);
+            return res.status(500).send('Error al obtener las ordenes');
         }
-        res.render('listar-ordenes', { ordenes: result, cartCount });
+        res.render('list-ordenes', { ordenes: result, cartCount });
     });
 });
+
+// Ruta PARA PROCESAR PAGOS 
+//    const cart = req.session.cart || [];
+//    const userID = req.session.id;
+
+//    if (cart.length === 0 ) {
+    
+//     return res.status(400).send('Error procesar pago el Carrito esta vacio ');
+// };
+
+// const referenceCode = `order_${Date.now()}` ;
+// const total = cart.reduce((sum, item) = sum + item.precio * item.cantidad, 0);
+
+// const signatureString = `${API_KEY}~${MERCHAN_ID}~${referenceCode}~${total}~COP`;
+// const signature = crypto.MD5(signatureString).toString();
+
+// const paymentData{
+//         test:11,
+//         language: 'es',
+//         command: 'SUBMIT_TRANSACTION',
+//         merchant: {
+//             apiLogin: API_LOGIN,
+//             apikey: API_KEY
+//         },
+//         transaction: {
+//             order: {
+//                 accountId: ACCOUNT_ID,
+//                 referenceCode: referenceCode,
+//                 description: 'compra en mi tienda Gammer',
+//                 language: 'es',
+//                 signature: signature,
+//                 notifyUrl: 'http://localhost:3000/confirmacion',
+//                 additionalValues:{
+//                     TX_VALUE:{
+//                         value: total,
+//                         currency: 'COP'
+//                     }
+//                 },
+//                 buyer: {
+//                     emailAddress: req.session.usuario.email
+//                 }
+
+//             },
+
+//             payer: {
+//                 emailAddress: req.session.usuario.email
+//             },
+//             type: 'AUTHORIZATION_AND_CAPTURE',
+//             paymetMethod: 'VISA',
+//             paymentCountry: 'CO'
+
+//         }
+// };
 
 module.exports = app;

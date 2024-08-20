@@ -18,6 +18,13 @@ app.use(session({
     saveUninitialized: true
 }));
 
+// Configurar API de pagos PYu
+const PAYU_API_URL = 'https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi';
+const API_KEY = 'hzNgjH5jWVgx26NQj4q7U37QEC';
+const MERCHAN_ID = '508029';
+const ACCOUNT_ID = '512321' ;
+const API_LOGIN = '1UAQ2ens3cbIA34';
+
 // Configurar multer para manejar la subida de archivos
 const storage = multer.diskStorage ({
     destination: function (req, file, cb) {
@@ -52,4 +59,4 @@ const dbconfig ={
 }
 
 
-module.exports = {app, PORT, dbconfig,session,upload  };
+module.exports = {app, PORT, dbconfig,session,upload,PAYU_API_URL , API_KEY ,MERCHAN_ID,ACCOUNT_ID ,API_LOGIN};
