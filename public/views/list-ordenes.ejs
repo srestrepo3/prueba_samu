@@ -44,7 +44,7 @@
                 <td><%= orden.user_nom %> <%= orden.user_ape%></td>
                 <td><%= orden.total.toLocaleString('es-CO') %></td>
                 <td><%= orden.estado %></td>
-                <td><%= new Date(orden.created_at).toLocaleString('es-CO', {year: 'numeric', month: 'long', day: 'numeric'}) %></td>
+                <td><%= new Date(orden.created_at).toLocaleString('es-CO', { year: 'numeric', month: 'long', day: 'numeric'}) %></td>
                <td></td>                 
                </tr>
               <% }); %>

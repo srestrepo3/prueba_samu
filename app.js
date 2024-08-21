@@ -269,7 +269,7 @@ app.get('/confirmacion-compra', (req, res) => {
 // Ruta listar ordenes pednientes 
 app.get('/list-ordenes', isAthenticated, (req, res) => {
     const cartCount = req.session.cart ? req.session.cart.length : 0;
-    const query = 'SELECT  usuarios.nombre AS user_nom, usuarios.apellidos AS user_ape ,ordenes.id,ordenes.total , ordenes.estado, ordenes.created_at  FROM  ordenes JOIN usuarios On ordenes.id = usuarios.id WHERE ordenes.estado = "Pendiente"  ';
+    const query = 'SELECT  usuarios.nombre AS user_nom, usuarios.apellidos AS user_ape ,ordenes.id,ordenes.total , ordenes.estado, ordenes.created_at  FROM  ordenes JOIN usuarios On ordenes.id = usuarios.id WHERE ordenes.estado = "Pendiente" ';
     db.query(query, (err, result) => {
         if (err) {
             console.err('Error al obtener las ordenes', err);
